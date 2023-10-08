@@ -1,0 +1,3 @@
+2023-10-08 22:19:36,255 Running job Job(interval=5, unit=seconds, do=sync_process, args=(), kwargs={'path_1': './source', 'path_2': './replica'})
+2023-10-08 22:19:41,273 Running job Job(interval=5, unit=seconds, do=sync_process, args=(), kwargs={'path_1': './source', 'path_2': './replica'})
+2023-10-08 22:19:46,291 Running job Job(interval=5, unit=seconds, do=sync_process, args=(), kwargs={'path_1': './source', 'path_2': './replica'})

@@ -1,0 +1,5 @@
+2023-10-08 22:07:49,331 Error occurred while printing GeeksforGeeks
+Traceback (most recent call last):
+  File "/Users/stefanjipescu/Desktop/programe/veeam_project/mian.py", line 67, in main
+    int(period)
+ValueError: invalid literal for int() with base 10: 'ee'
