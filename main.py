@@ -17,7 +17,7 @@ class file_management():
         self.source_files_list = source_files_list
         self.replica_files_list = replica_files_list
 
-#This function was created to compare two folders based on a list of files. It returns 3 list: one with common items,
+#This function was created to compare two folders based on a list of files. It returns 3 lists: one with common items,
 #one with items only in the one of the folders and one list with items only in the second files
     def compare(self):
         self.match, self.mismatch, self.errors = filecmp.cmpfiles(self.source_path, self.replica_path,self.source_files_list)
@@ -34,7 +34,7 @@ class file_management():
                 logging.debug(f"{f} file was deleted from {self.replica_path}")
             
 
-#The 'add_file' function was created to add the item which was privius deleted(item which were modified) and also the items which were missing from the replica folder
+#The 'add_file' function was created to add the item which was previously deleted(item which was modified) and also the items which were missing from the replica folder
     def add_file(self):
         for f in (self.errors + self.mismatch):
             temp_path = os.path.join(self.source_path, f)
@@ -46,8 +46,8 @@ class file_management():
                 logging.debug(f"{f} file was added on {self.replica_path}")
 
 
-#The 'sync_process' function brings tougheter all function 
-#and synchronies the the folders. If an another folder is discoverd inside the mail folder, the function is colled recursive in order to explore all folders
+#The 'sync_process' function brings together all functions
+#and synchronies the folders. If an another folder is discoverd inside the mail folder, the function is called recursively in order to explore all folders
 def sync_process(path_1, path_2):
     node1 = folder_content(path_1).files()
     node2 = folder_content(path_2).files()
@@ -61,12 +61,12 @@ def sync_process(path_1, path_2):
     node.del_file()
     node.add_file()
 
-#The 'log_' function implement the log
+#The 'log_' function implements the log
 def log_(log_name):
     logging.basicConfig(filename= log_name, level=logging.DEBUG, format="%(asctime)s %(message)s")
 
-#The 'main funtion' collect the information from the user, create the chron and also call the 'sync_process' function in order to synchronies the the folders. 
-#This function all take care of few exception which may occurs on the collecting data from the user process.
+#The 'main function' collects the information from the user, create the cron and also call the 'sync_process' function in order to synchronies the folders. 
+#This function all takes care of few exceptions which may occur on the collecting data from the user process.
 def main():
     source = input("Please insert the source folder path: ")
     clone = input("Please insert the clone folder path: ")
