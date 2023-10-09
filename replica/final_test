@@ -1,1 +1,0 @@
-2023-10-08 22:21:33,498 Running job Job(interval=5, unit=seconds, do=sync_process, args=(), kwargs={'path_1': './source', 'path_2': './replica'})
