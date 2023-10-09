@@ -1,13 +1,15 @@
 import os, filecmp, shutil, schedule, time, logging
 
-class file_in_folder:
+# This class was created in order to create a list with all files and folders from inside a folder.
+class folder_content:
     def __init__(self,folder_path) -> None:
         self.folder_path = folder_path
         self.file_list = os.listdir(self.folder_path)
     def files(self):
         return os.listdir(self.folder_path)
 
-
+#This class was created to compare items from the list, to delete de item from the replica folder 
+#which are not in the source folder and also to add the missing items which are not in the replica folder
 class file_management():
     def __init__(self, source_path, replica_path,source_files_list, replica_files_list) -> None:
         self.source_path = source_path
@@ -15,19 +17,12 @@ class file_management():
         self.source_files_list = source_files_list
         self.replica_files_list = replica_files_list
 
+#This function was created to compare two folders based on a list of files. It returns 3 list: one with common items,
+#one with items only in the one of the folders and one list with items only in the second files
     def compare(self):
         self.match, self.mismatch, self.errors = filecmp.cmpfiles(self.source_path, self.replica_path,self.source_files_list)
 
-    def add_file(self):
-        for f in (self.errors + self.mismatch):
-            temp_path = os.path.join(self.source_path, f)
-            if os.path.isdir(temp_path):
-                shutil.copytree(temp_path, os.path.join(self.replica_path, f))
-                logging.debug(f"{f} folder was added on {self.replica_path}")
-            else:
-                shutil.copy2(temp_path, self.replica_path)
-                logging.debug(f"{f} file was added on {self.replica_path}")
-
+#The 'del_file' function was implemented in order to delete files from the replica list, which are not part of the source folder list and also the item which were modified
     def del_file(self):
         for f in ([x for x in self.replica_files_list if x not in self.source_files_list] + self.mismatch):
             temp_path = os.path.join(self.replica_path, f)
@@ -39,10 +34,23 @@ class file_management():
                 logging.debug(f"{f} file was deleted from {self.replica_path}")
             
 
+#The 'add_file' function was created to add the item which was privius deleted(item which were modified) and also the items which were missing from the replica folder
+    def add_file(self):
+        for f in (self.errors + self.mismatch):
+            temp_path = os.path.join(self.source_path, f)
+            if os.path.isdir(temp_path):
+                shutil.copytree(temp_path, os.path.join(self.replica_path, f))
+                logging.debug(f"{f} folder was added on {self.replica_path}")
+            else:
+                shutil.copy2(temp_path, self.replica_path)
+                logging.debug(f"{f} file was added on {self.replica_path}")
 
+
+#The 'sync_process' function brings tougheter all function 
+#and synchronies the the folders. If an another folder is discoverd inside the mail folder, the function is colled recursive in order to explore all folders
 def sync_process(path_1, path_2):
-    node1 = file_in_folder(path_1).files()
-    node2 = file_in_folder(path_2).files()
+    node1 = folder_content(path_1).files()
+    node2 = folder_content(path_2).files()
     for f in node1:
         if f in node2 and os.path.isdir(os.path.join(path_1, f)):
             node1.remove(f)
@@ -53,9 +61,12 @@ def sync_process(path_1, path_2):
     node.del_file()
     node.add_file()
 
+#The 'log_' function implement the log
 def log_(log_name):
     logging.basicConfig(filename= log_name, level=logging.DEBUG, format="%(asctime)s %(message)s")
 
+#The 'main funtion' collect the information from the user, create the chron and also call the 'sync_process' function in order to synchronies the the folders. 
+#This function all take care of few exception which may occurs on the collecting data from the user process.
 def main():
     source = input("Please insert the source folder path: ")
     clone = input("Please insert the clone folder path: ")
