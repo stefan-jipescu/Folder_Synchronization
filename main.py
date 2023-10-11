@@ -18,7 +18,7 @@ class file_management():
         self.replica_files_list = replica_files_list
 
 #This function was created to compare two folders based on a list of files. It returns 3 lists: one with common items,
-#one with items only in the one of the folders and one list with items only in the second files
+#one with items only in the one of the folders and one list with items only in the second files.
     def compare(self):
         self.match, self.mismatch, self.errors = filecmp.cmpfiles(self.source_path, self.replica_path,self.source_files_list)
 
